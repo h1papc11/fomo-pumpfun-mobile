@@ -5,9 +5,12 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from 'expo-status-bar';
 
+import { CONFIG } from '@/constants/common';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import { PrivyProvider } from '@privy-io/expo';
 import { useEffect } from 'react';
 import { Appearance } from 'react-native';
+
 import 'react-native-reanimated';
 
 export const unstable_settings = {
@@ -46,6 +49,8 @@ export default function RootLayout() {
   }, [loaded]);
 
   return (
+    <PrivyProvider appId={CONFIG.privyAppID} clientId={CONFIG.privyClientID}>
+
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="(home)" options={{ headerShown: false }} />
@@ -53,5 +58,6 @@ export default function RootLayout() {
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>
+    </PrivyProvider>
   );
 }
