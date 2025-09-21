@@ -1,23 +1,49 @@
 import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 import AppText from '@/components/AppText';
-import { HelloWave } from '@/components/hello-wave';
+import AppView from '@/components/AppView';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import { Colors } from '@/constants/theme';
+import { useColorScheme } from '@/hooks/use-color-scheme';
+import FilterButtonTabs from '@/sections/home/FilterButtonTabs';
+import MainHorizontalTabs from '@/sections/home/MainHorizontalTabs';
+import TrendingNow from '@/sections/home/TrendingNow';
 
 export default function HomeScreen() {
+  const colorScheme = useColorScheme() ?? 'dark';
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
+      contentContainerStyle={{
+        paddingHorizontal: 18,
+        paddingVertical: 12,
+        borderTopRightRadius: 16,
+        borderTopLeftRadius: 16,
+        flex: 1,
+      }}
       headerImage={
         <Image
           source={require('@/assets/images/partial-react-logo.png')}
           style={styles.reactLogo}
         />
-      }>
-      <ThemedView style={styles.titleContainer}>
+      }
+
+      headerBanner = {
+        <AppView style={[
+          {width: '90%', marginHorizontal: 'auto', borderRadius: 16, top: '50%', backgroundColor: Colors[colorScheme].white, paddingVertical: 15, justifyContent: 'center', alignItems: 'center'}
+        ]}>
+        <AppText type="defaultSemiBold" style={{ color: Colors[colorScheme].black }}>Instant deposit with Google Pay</AppText>
+        </AppView>
+    
+      }
+      >
+        <MainHorizontalTabs />
+
+        <TrendingNow />
+
+        <FilterButtonTabs />
+      {/* <ThemedView style={styles.titleContainer}>
         <AppText type="title">Welcome!</AppText>
         <HelloWave />
       </ThemedView>
@@ -73,7 +99,7 @@ export default function HomeScreen() {
           <AppText type="defaultSemiBold">app</AppText> to{' '}
           <AppText type="defaultSemiBold">app-example</AppText>.
         </AppText>
-      </ThemedView>
+      </ThemedView> */}
     </ParallaxScrollView>
   );
 }
