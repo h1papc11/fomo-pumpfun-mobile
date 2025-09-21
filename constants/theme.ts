@@ -15,7 +15,8 @@ export const Colors = {
     text: '#000000',
     subtitle: '#949494',
     gain: '#00E98C',
-    loss: '#FF666C'
+    loss: '#FF666C',
+    coinCardBg: '#1F1F1F'
   },
   dark: {
     background: "#000000",
@@ -28,7 +29,9 @@ export const Colors = {
     text: '#ffffff',
     subtitle: '#949494',
      gain: '#00E98C',
-    loss: '#FF666C'
+    loss: '#FF666C',
+    coinCardBg: '#1F1F1F'
+
   },
 };
 

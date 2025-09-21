@@ -6,6 +6,7 @@ import AppView from '@/components/AppView';
 import ParallaxScrollView from '@/components/parallax-scroll-view';
 import { Colors } from '@/constants/theme';
 import { useColorScheme } from '@/hooks/use-color-scheme';
+import CoinCardList from '@/sections/home/CoinCardList';
 import FilterButtonTabs from '@/sections/home/FilterButtonTabs';
 import MainHorizontalTabs from '@/sections/home/MainHorizontalTabs';
 import TrendingNow from '@/sections/home/TrendingNow';
@@ -43,6 +44,8 @@ export default function HomeScreen() {
         <TrendingNow />
 
         <FilterButtonTabs />
+
+        <CoinCardList />
       {/* <ThemedView style={styles.titleContainer}>
         <AppText type="title">Welcome!</AppText>
         <HelloWave />
