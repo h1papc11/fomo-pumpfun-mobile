@@ -1,5 +1,5 @@
 export const CONFIG = {
-    privyAppID: 'cmfsp70f00041jr0ckxc95erl',
-    privyClientID: ''
+    privyAppID: 'cmfuyfu5000wwl80docb81wfe',
+    privyClientID: 'client-WY6QkHTrNW3qjP2ho4FR7HmSdJ5KTNBpzT15EJECFCsYU'
 
 }
