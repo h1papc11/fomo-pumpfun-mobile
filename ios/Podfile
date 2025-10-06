@@ -17,10 +17,22 @@ end
 target 'myfomo' do
   config = use_native_modules!
 
+  # pod 'Firebase/Auth'
+  # pod 'Firebase/Core'
+
+  # # (Strictly optional to list—these are transitive—but being explicit helps)
+  # pod 'GoogleUtilities',            :modular_headers => true
+  # pod 'FirebaseCore',               :modular_headers => true
+  # pod 'FirebaseCoreExtension',      :modular_headers => true
+  # pod 'FirebaseAuthInterop',        :modular_headers => true
+  # pod 'FirebaseAppCheckInterop',    :modular_headers => true
+  # pod 'RecaptchaInterop',           :modular_headers => true
+
   use_react_native!(
     :path => config[:reactNativePath],
     # An absolute path to your application root.
-    :app_path => "#{Pod::Config.instance.installation_root}/.."
+    :app_path => "#{Pod::Config.instance.installation_root}/..",
+    :hermes_enabled => false
   )
 
   post_install do |installer|
@@ -31,5 +43,12 @@ target 'myfomo' do
       :mac_catalyst_enabled => false,
       # :ccache_enabled => true
     )
+    
+    # Explicitly disable Hermes
+    installer.pods_project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['USE_HERMES'] = 'NO'
+      end
+    end
   end
 end

@@ -1,0 +1,26 @@
+export const colors = {
+  background: "#0B0F14",
+  card: "#101620",
+  cardAlt: "#0E131A",
+  textPrimary: "#EAF2FF",
+  textSecondary: "#A9B4C0",
+  accent: "#3AB5F8",
+  accentBorder:"#25E9FF",
+  accentDim: "rgba(0,208,255,0.15)",
+  chip: "#1B2430",
+  chipActive: "#2A3442",
+  divider: "#1F2732",
+  success: "#22C55E",
+  warning: "#F59E0B",
+  red: "#C1070A",
+  surface: "#0E141C",
+  input: "#0E141C",
+  outline: "#223042",
+  white: "#FFFFFF",
+  black: "#000000",
+  darkGray: "#1F1F1F",
+  lightGray: '#949494',
+  solidDarkGray: "#191919",
+
+
+};

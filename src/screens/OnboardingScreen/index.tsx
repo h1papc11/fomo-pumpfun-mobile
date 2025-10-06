@@ -1,7 +1,8 @@
 import React from "react";
 import { View, Text, Image } from "react-native";
 import styles from "./styles";
-import Button from "../../components/button";
+import Button from "../../components/Button";
+import { navigate } from "../../navigation/navigationReference";
 
 const OnboardingScreen = () => {
     return (
@@ -23,7 +24,7 @@ const OnboardingScreen = () => {
 
             <Button
                 label="Continue with account"
-                onPress={() => console.log("Continue pressed")}
+                onPress={() => navigate('AccountScreen')}
                 style={styles.buttonAlign}
             />
 

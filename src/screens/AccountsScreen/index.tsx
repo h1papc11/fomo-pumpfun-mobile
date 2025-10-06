@@ -6,10 +6,12 @@ import {
     FlatList,
     ListRenderItem,
     ImageSourcePropType,
+    Pressable,
 } from "react-native";
 import Feather from "react-native-vector-icons/Feather";
 import styles from "./styles";
-import Button from "../../components/button";
+import Button from "../../components/Button";
+import { navigate } from "../../navigation/navigationReference";
 
 type Account = {
     id: string;
@@ -27,7 +29,7 @@ const accounts: Account[] = [
         address: "5dsjhd...8dsjh",
         balance: "$12.45",
         isCurrent: true,
-        avatar: require("../../assets/images/avatar.png"),
+        avatar: require("../../assets/images/avatar1.png"),
     },
     {
         id: "2",
@@ -35,7 +37,7 @@ const accounts: Account[] = [
         address: "78dsjhd...9yesdr",
         balance: "$156.45",
         isCurrent: false,
-        avatar: require("../../assets/images/avatar.png"),
+        avatar: require("../../assets/images/avatar1.png"),
     },
 ];
 
@@ -44,7 +46,7 @@ type AccountItemProps = {
 };
 
 const AccountItem: React.FC<AccountItemProps> = ({ account }) => (
-    <View style={styles.accountCard}>
+    <Pressable style={styles.accountCard}>
         <Image source={account.avatar} style={styles.avatar} />
 
         <View style={styles.accountInfo}>
@@ -56,7 +58,7 @@ const AccountItem: React.FC<AccountItemProps> = ({ account }) => (
             <Text style={styles.balance}>{account.balance}</Text>
             <Feather name="edit-2" size={18} color="white" />
         </View>
-    </View>
+    </Pressable>
 );
 
 const AccountScreen: React.FC = () => {
@@ -86,7 +88,7 @@ const AccountScreen: React.FC = () => {
 
             <Button
                 label="Add Account"
-                onPress={() => console.log("Add Account pressed")}
+                onPress={() => navigate('LoginScreen')}
                 style={styles.addButtonSpacing}
             />
         </View>

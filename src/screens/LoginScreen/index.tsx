@@ -1,129 +1,100 @@
-import React, { useState } from "react";
-import {
-    Text,
-    TextInput,
-    Image,
-    ScrollView,
-    View,
-} from "react-native";
-import LinearGradient from "react-native-linear-gradient";
+import React, { useState, useEffect, ReactNode } from "react";
+import { Image, BackHandler } from "react-native";
+import Animated, { FadeInRight, FadeOutLeft } from "react-native-reanimated";
+import Screen from "../../components/Screen";
+import WalletOptions from "./components/WalletOptions";
+import SocialOptions from "./components/SocialOptions";
+import WalletSelection from "./components/WalletSelection";
+import OtpInput from "./components/OtpInput";
 import styles from "./styles";
-import Button from "../../components/button";
-import PhantomIcon from '../../assets/icons/phantom.svg'
-import GoogleIcon from '../../assets/icons/google.svg'
-import AppleIcon from '../../assets/icons/apple.svg'
-import XIcon from '../../assets/icons/x.svg'
-import { Wallet, WalletCards } from 'lucide-react-native'
+import { navigate } from "../../navigation/navigationReference";
+// import OverlayCard from "../../components/OverlayCard";
+// import GoogleIcon from '../../assets/icons/google-fill.svg'
+// import TickIcon from '../../assets/icons/tick.svg'
 
-const LoginScreen = () => {
-    const [showSocial, setShowSocial] = useState(false);
+type Step = "walletOptions" | "socialOptions" | "walletSelection" | "otpInput";
+
+interface StepConfig {
+    key: Step;
+    component: ReactNode;
+}
+
+const LoginScreen: React.FC = () => {
+    const [step, setStep] = useState<Step>("walletOptions");
+
+    const stepOrder: Step[] = ["walletOptions", "socialOptions", "walletSelection", "otpInput"];
+
+    useEffect(() => {
+        const backAction = () => {
+            const currentIndex = stepOrder.indexOf(step);
+            if (currentIndex > 0) {
+                setStep(stepOrder[currentIndex - 1]);
+                return true;
+            }
+            return false;
+        };
+
+        const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
+        return () => backHandler.remove();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [step]);
+
+    const steps: StepConfig[] = [
+        { key: "walletOptions", component: <WalletOptions goToSocial={() => setStep("socialOptions")} /> },
+        { key: "socialOptions", component: <SocialOptions goToWallet={() => setStep("walletSelection")} /> },
+        { key: "walletSelection", component: <WalletSelection onWalletSelect={() => setStep("otpInput")} /> },
+        { key: "otpInput", component: <OtpInput email="ravantmedia@gmail.com" onSubmit={() => navigate('MainTabs')} /> },
+    ];
+
+    const currentStep = steps.find(s => s.key === step);
 
     return (
-        <LinearGradient colors={["#3AB5F8", "#000000", "#000000"]} style={styles.container}>
-            <ScrollView
-                contentContainerStyle={styles.scroll}
-                keyboardShouldPersistTaps="handled"
-            >
-                <Image
-                    source={require("../../assets/images/syringe.png")}
-                    style={styles.icon}
-                />
-
-                {!showSocial ? (
-                    <>
-                        <Text style={styles.title}>Connect or Create wallet</Text>
-                        <Text style={styles.subtitle}>Sign up to see more</Text>
-
-                        <Button
-                            label={
-                                <View>
-                                    <Text style={styles.buttonText}>Login with email or Socials</Text>
-                                    <Text style={styles.helperText}>
-                                        zero confirmation trading
-                                    </Text>
-                                </View>}
-                            variant="outline"
-                            leftIconName="user"
-                            leftIconFamily="Feather"
-                            leftIconColor="#949494"
-                            rightIconName="chevron-right"
-                            rightIconFamily="Feather"
-                            onPress={() => setShowSocial(true)}
-                        />
-
-                        <Text style={styles.orText}>OR</Text>
-
-                        <Button
-                            label="Phantom"
-                            variant="outline"
-                            leftSvgIcon={PhantomIcon}
-                            style={styles.buttonContainer}
-                        />
-                        <Button
-                            label="More Wallets"
-                            variant="outline"
-                            leftLucideIcon={Wallet}
-                            leftIconColor="#949494"
-                            style={styles.buttonContainer}
-                        />
-
-                    </>
-                ) : (
-                    <>
-                        <Text style={styles.subheader}>Select your account</Text>
-                        <Text style={styles.subtitleSmall}>
-                            Choose a method to create or sign in to your wallet...
-                        </Text>
-
-                        <Button
-                            label="Continue with Google"
-                            variant="outline"
-                            leftSvgIcon={GoogleIcon}
-                            style={styles.buttonContainer}
-                        />
-                        <Button
-                            label="Apple"
-                            variant="outline"
-                            leftSvgIcon={AppleIcon}
-                            style={styles.buttonContainer}
-                        />
-                        <Button
-                            label="Twitter"
-                            variant="outline"
-                            leftSvgIcon={XIcon}
-                            style={styles.buttonContainer}
-                        />
-                        <Button
-                            label="Continue with a wallet"
-                            variant="outline"
-                            leftLucideIcon={WalletCards}
-                            style={styles.buttonContainer}
-                        />
-
-                        <View style={styles.orContainer}>
-                            <View style={styles.line} />
-                            <Text style={styles.orText}>OR</Text>
-                            <View style={styles.line} />
-                        </View>
-                        <View style={styles.inputContainer}>
-                            <Text style={styles.inputText}>Enter Email address</Text>
-                        </View>
-                        <TextInput
-                            style={styles.input}
-                            placeholder="Email address"
-                            placeholderTextColor="#666"
-                        />
-                        <Button label="Log in" />
-                    </>
-                )}
-
-                <Image
+        <Screen contentContainerStyle={styles.scroll}>
+            {currentStep && (
+                <Animated.View
+                    key={currentStep.key}
+                    entering={FadeInRight}
+                    exiting={FadeOutLeft}
+                    style={styles.stepContainer}
+                >
+                    <Image
+                        source={require("../../assets/images/syringe.png")}
+                        style={styles.icon}
+                    />
+                    {currentStep.component}
+                    <Image
+                        source={require("../../assets/images/protected_by_privy.png")}
+                        style={styles.footerImage}
+                        resizeMode="contain"
+                    />
+                </Animated.View>
+            )}
+            {/* <OverlayCard
+                visible={true}
+                onClose={() => { }}
+                title="Successfully connected with google"
+                message="You're good to go!"
+                SvgIcon={GoogleIcon}
+                backgroundColor="#000"
+                titleColor="#fff"
+                messageColor="#fff"
+            /> */}
+            {/* <OverlayCard
+                visible={true}
+                onClose={() => { }}
+                title="Welcome to fomo.gg"
+                message="You’re successfully created an account"
+                SvgIcon={TickIcon}
+                backgroundColor="#000"
+                titleColor="#fff"
+                messageColor="#fff"
+                custom={<Image
                     source={require("../../assets/images/protected_by_privy.png")}
-                    style={styles.footerImage}
+                    style={[styles.footerImage, styles.footerAlign]}
                     resizeMode="contain"
-                />
-            </ScrollView>
-        </LinearGradient>
+                />}
+            /> */}
+        </Screen>
     );
 };
 
