@@ -9,18 +9,22 @@ import {
 import { colors } from '../../utils/colors';
 
 type Props = {
-  tabs: string[];
+  tabs: any[];
   activeIndex: number;
   onChange: (i: number) => void;
   customStyle?: object;
-  activityTabButton?:object
-
-  
+  activityTabButton?: object;
 };
 
-const ChipTabs: React.FC<Props> = ({ tabs, activeIndex, onChange ,customStyle,activityTabButton}) => {
+const ChipTabs: React.FC<Props> = ({
+  tabs,
+  activeIndex,
+  onChange,
+  customStyle,
+  activityTabButton,
+}) => {
   return (
-    <View style={[styles.container,customStyle]}>
+    <View style={[styles.container, customStyle]}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         {tabs.map((t, i) => {
           const active = i === activeIndex;
@@ -28,7 +32,11 @@ const ChipTabs: React.FC<Props> = ({ tabs, activeIndex, onChange ,customStyle,ac
             <TouchableOpacity
               key={t + i}
               onPress={() => onChange(i)}
-              style={[styles.chip,activityTabButton, active && styles.chipActive]}
+              style={[
+                styles.chip,
+                activityTabButton,
+                active && styles.chipActive,
+              ]}
             >
               <Text style={[styles.chipText, active && styles.chipTextActive]}>
                 {t}
@@ -43,7 +51,7 @@ const ChipTabs: React.FC<Props> = ({ tabs, activeIndex, onChange ,customStyle,ac
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 12,
+    paddingHorizontal: 10,
     paddingTop: 16,
     paddingBottom: 16,
   },
@@ -59,7 +67,7 @@ const styles = StyleSheet.create({
   chipActive: {
     backgroundColor: colors.accent,
     borderColor: colors.accentBorder,
-    borderWidth:1
+    borderWidth: 1,
   },
   chipText: { color: colors.textSecondary, fontSize: 12 },
   chipTextActive: { color: colors.textPrimary, fontWeight: '600' },

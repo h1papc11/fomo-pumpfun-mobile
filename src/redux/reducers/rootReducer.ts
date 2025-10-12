@@ -1,7 +1,10 @@
-import { combineSlices } from '@reduxjs/toolkit';
+import { combineReducers } from '@reduxjs/toolkit';
 import authSlice from './authSlice';
-const rootReducer = combineSlices({
-    auth: authSlice,
+import watchListSlice from './watchListSlice';
+
+const rootReducer = combineReducers({
+  auth: authSlice,
+  watchList: watchListSlice,
 });
 
 export default rootReducer;

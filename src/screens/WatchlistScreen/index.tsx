@@ -1,9 +1,13 @@
 import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native';
-import React, { memo,useState } from 'react';
+import React, { memo, useState } from 'react';
 import styles from './styles';
 import { Icons } from '../../utils/icons';
 import ChipTabs from '../../components/ChipTabs';
 import { navigate } from '../../navigation/navigationReference';
+import AddWatch from './AddWatch';
+import CreateWatch from './CreateWatch';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../redux/store';
 
 const mockData = [
   {
@@ -31,13 +35,13 @@ const mockData = [
     img: 'https://placekitten.com/210/210',
   },
 ];
-const TABS = ['Default', 'Devss'];
-//  navigate('CoinDetailScreen');
 // ----- Card Component -----
 const Card = memo(({ item }: any) => {
-  const didClickCard = () => {navigate('CoinDetailScreen')}
+  const didClickCard = () => {
+    navigate('CoinDetailScreen');
+  };
   return (
-    <TouchableOpacity style={styles.card} onPress={didClickCard} >
+    <TouchableOpacity style={styles.card} onPress={didClickCard}>
       <Image
         source={require('./../../assets/images/icon.png')}
         style={[styles.avatar, item.live && styles.liveBorder]}
@@ -47,8 +51,8 @@ const Card = memo(({ item }: any) => {
         {/* Left column */}
         <View style={styles.leftColumn}>
           <Text style={styles.title} numberOfLines={1}>
-            {item.name} <Image source={Icons.timerIcon} resizeMode="contain" /> <Text style={styles.sub}>{"15m"}</Text>
-            
+            {item.name} <Image source={Icons.timerIcon} resizeMode="contain" />{' '}
+            <Text style={styles.sub}>{'15m'}</Text>
           </Text>
           <Text style={styles.sub}>{item.sub}</Text>
         </View>
@@ -65,11 +69,10 @@ const Card = memo(({ item }: any) => {
           </View>
 
           <View style={styles.progressRow}>
- 
             <Text style={styles.time}>{item.time}</Text>
-            <Text style={styles.timeValue}>{"5.97%"}</Text>
+            <Text style={styles.timeValue}>{'5.97%'}</Text>
             <Text style={styles.time}>{item.time}</Text>
-            <Text style={styles.timeValue}>{"45.97%"}</Text>
+            <Text style={styles.timeValue}>{'45.97%'}</Text>
           </View>
         </View>
       </View>
@@ -85,18 +88,53 @@ const Card = memo(({ item }: any) => {
 });
 
 const WatchlistScreen = () => {
-      const [tabIndex, setTabIndex] = useState(0);
-    
+  const watchLists = useSelector(
+    (state: RootState) => state.watchList?.watchLists ?? [],
+  );
+
+  const [tabIndex, setTabIndex] = useState<number>(0);
+  const [showAddWatchList, setShowAddWatchList] = useState<boolean>(false);
+  const [showCreateWatchList, setShowCreateWatchList] =
+    useState<boolean>(false);
+
+  const didClickAddWatch = () => {
+    setShowAddWatchList(!showAddWatchList);
+  };
+  const didClickForCreateWatch = () => {
+    setShowAddWatchList(false);
+    setShowCreateWatchList(!showCreateWatchList);
+  };
+
   return (
     <View>
-    <ChipTabs tabs={TABS} activeIndex={tabIndex} onChange={setTabIndex} />
-        
+      <View style={styles.tabView}>
+        <ChipTabs
+          tabs={watchLists.map(item => item.name)}
+          activeIndex={tabIndex}
+          onChange={setTabIndex}
+          customStyle={styles.customTab}
+        />
+        <TouchableOpacity style={styles.addBtn} onPress={didClickAddWatch}>
+          <Text style={styles.addText}>+</Text>
+        </TouchableOpacity>
+      </View>
+
       <FlatList
         data={[...mockData, ...mockData, ...mockData]} // repeat for scroll
         keyExtractor={(item, index) => `${item.id}-${index}`}
         renderItem={({ item }) => <Card item={item} />}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
+      />
+
+      <AddWatch
+        visible={showAddWatchList}
+        onClose={didClickAddWatch}
+        didAddClick={didClickForCreateWatch}
+      />
+      <CreateWatch
+        visible={showCreateWatchList}
+        onClose={didClickForCreateWatch}
       />
     </View>
   );
